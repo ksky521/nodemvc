@@ -68,7 +68,7 @@ var mimes = {
     default_type: 'application/octet-stream'
 };
 
-var $ = {
+var _ = {
     mimes: mimes,
     //如果框架没有支持这个MIME,可以自己定义一个
     define: function(ext, mime) {
@@ -88,7 +88,7 @@ var $ = {
     },
     //通过accept获取mime
     accept2mime: function(accept) {
-        return $.ext2mime($.accept2ext(accept));
+        return _.ext2mime(_.accept2ext(accept));
     },
     //通过扩展名获取mime
     ext2mime: function(ext) {
@@ -100,8 +100,8 @@ var $ = {
     },
     //通过路径获取mime
     path2mime: function(path) {
-        return $.ext2mime($.path2ext(path));
+        return _.ext2mime(_.path2ext(path));
     }
 };
 
-module.exports = $;
+module.exports = _;

@@ -1,4 +1,4 @@
-var $ = require('./mix.js');
+var _ = $.tools;
 
 /**
  * Promise类
@@ -55,22 +55,22 @@ Promise.prototype = {
         return this.then(handler);
     },
     fire: function(fns, arg) {
-        if ($.isArray(fns)) {
+        if (_.isArray(fns)) {
             var fn;
             while (fn = fns.shift()) {
-                if ($.isFunction(fn)) {
+                if (_.isFunction(fn)) {
                     fn.apply(null, arg);
                 }
             }
             this.clear();
-        } else if ($.isFunction(fns)) {
+        } else if (_.isFunction(fns)) {
             fn.apply(null, arg);
         }
         return this;
     },
     add: function(handler, which) {
         which = which + 'Handlers';
-        if ($.isFunction(handler) && this[which]) {
+        if (_.isFunction(handler) && this[which]) {
             this[which].push(handler);
         }
         return this;
