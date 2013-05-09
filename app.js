@@ -23,7 +23,7 @@ $.dir = {
     module: root + 'module/',
     widget: root + 'widget/',
     config: root + 'config/',
-    'static': root + 'static/'
+    webroot: root + 'www/'
 };
 $.ejs = require('ejs');
 

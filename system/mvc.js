@@ -16,6 +16,7 @@ var moduleDir = $.dir.module;
 var config = $.config;
 var charset = config.charset;
 var encoding = config.encoding;
+var webroot = $.dir.webroot;
 var _ = {
     start: handlerQuery
 };
@@ -25,6 +26,33 @@ module.exports = _;
 
 
 function handlerQuery(req, res) {
+    //静态资源
+    var realStaticPath = path.join(webroot, URL.parse(req.url).pathname);
+
+    console.log(realStaticPath);
+    if (fs.existsSync(realStaticPath)) {
+        fs.readFile(realStaticPath, 'binary', function(err, file) {
+            if (err) {
+                res.writeHead(500, {
+                    'Powered-By': 'tmvc',
+                    'Content-Type': 'text/plain'
+                });
+                res.end(err);
+            } else {
+                res.writeHead(200, {
+                    'Powered-By': 'tmvc',
+                    'Content-Type': $.mime.path2mime(realStaticPath)
+                });
+                res.write(file, 'binary');
+                res.end();
+            }
+
+        });
+        return;
+    }
+
+
+
     //获取请求的module和action
     var moduleObj = router.parse(req.url, req.method);
     if (moduleObj.module && moduleObj.action) {
@@ -63,15 +91,18 @@ var renderHtml = function(tpl, res) {
     res.end(tpl);
 }
 var is404 = $.is404 = function is404(req, res, data) {
-    res.statusCode = 404;
-    res.setHeader('Content-Type', 'text/plain');
-    res.end(data.url + '没找到');
+    res.writeHead(404, {
+        'Powered-By': 'tmvc',
+        'Content-Type': 'text/plain'
+    });
+    res.end('<h1>404 Not Found</h1>' + data.url + '没找到');
 }
 
 var is500 = $.is500 = function is500(req, res, data) {
-
-    res.statusCode = 500;
-    res.setHeader('Content-Type', 'text/plain');
+    res.writeHead(500, {
+        'Powered-By': 'tmvc',
+        'Content-Type': 'text/plain'
+    });
     res.end('500错误：' + data.message);
 }
 
